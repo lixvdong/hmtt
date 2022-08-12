@@ -15,6 +15,10 @@ import {
   Cell,
   PullRefresh,
   ActionSheet,
+  Popup,
+  Row,
+  Col,
+  Badge,
   List,
   Tab,
   Tabs
@@ -31,6 +35,10 @@ const vants = [
   Cell,
   PullRefresh,
   ActionSheet,
+  Popup,
+  Row,
+  Col,
+  Badge,
   List,
   Tab,
   Tabs
