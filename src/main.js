@@ -27,6 +27,7 @@ import {
   Tag,
   CellGroup,
   Image,
+  DatetimePicker,
   Dialog
 } from 'vant'
 const vants = [
@@ -53,6 +54,7 @@ const vants = [
   Tag,
   CellGroup,
   Image,
+  DatetimePicker,
   Dialog
 ]
 vants.forEach(item => Vue.use(item))

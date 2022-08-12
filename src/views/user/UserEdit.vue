@@ -13,23 +13,40 @@
         </template>
       </van-cell>
       <van-cell title="名称" is-link :value="user.name" @click="show = true" />
-      <van-cell title="生日" is-link :value="user.birthday" />
+      <van-cell title="生日" is-link :value="user.birthday" @click="isShow = true" />
     </van-cell-group>
     <!-- 修改名称弹窗 -->
     <van-dialog v-model="show" title="请输入要修改的名称" show-cancel-button @confirm="changeName">
       <van-field v-fofo v-model="user.name" maxlength="7" input-align="center" />
     </van-dialog>
+    <!-- 修改出生日期 -->
+    <van-popup v-model="isShow" position="bottom" :style="{ height: '40%' }" @close="closePopup">
+      <van-datetime-picker
+        v-model="currentDate"
+        type="date"
+        title="选择出生年月日"
+        :min-date="minDate"
+        :max-date="maxDate"
+        @cancel="isShow = false"
+        @confirm="changeBirday"
+      />
+    </van-popup>
   </div>
 </template>
 
 <script>
 import { getUserAPI, changePhotoAPI, changeUserAPI } from '@/api/user'
+import dayjs from 'dayjs'
 export default {
   name: 'UserEdit',
   data() {
     return {
       user: {},
-      show: false
+      show: false, // 控制修改名称
+      isShow: false, // 控制修改生日
+      minDate: new Date(1980, 0, 1),
+      maxDate: new Date(),
+      currentDate: new Date(2021, 0, 17)
     }
   },
   created() {
@@ -65,6 +82,23 @@ export default {
         console.log(err)
         this.$notify({ type: 'warning', message: '修改失败，请联系程序员～～～' })
       }
+    },
+    // 修改生日
+    async changeBirday(value) {
+      try {
+        const str = dayjs(value).format('YYYY-MM-DD')
+        await changeUserAPI({ birthday: str })
+        this.user.birthday = str
+        this.isShow = false
+        this.$notify({ type: 'success', message: '修改成功' })
+      } catch (err) {
+        console.log(err)
+        this.$notify({ type: 'warning', message: '修改失败，请联系程序员～～～' })
+      }
+    },
+    // 关闭日期弹窗
+    closePopup() {
+      this.currentDate = new Date(this.user.birthday)
     }
   }
 }
