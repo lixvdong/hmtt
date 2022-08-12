@@ -20,6 +20,7 @@
           v-for="item in searchList"
           :key="item.art_id"
           :obj="item"
+          :isShow="false"
           @click.native="$router.push(`/articledetail?id=${item.art_id}`)"
         />
       </van-list>

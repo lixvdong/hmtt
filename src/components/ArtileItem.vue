@@ -24,7 +24,7 @@
             <span>{{ dateFrom(obj.pubdate) }}</span>
           </div>
           <!-- 反馈按钮 -->
-          <van-icon name="cross" @click.stop="show = true" />
+          <van-icon name="cross" @click.stop="show = true" v-if="isShow" />
         </div>
       </template>
     </van-cell>
@@ -46,7 +46,11 @@ import { firstActions, secondActions } from '@/utils/sheetData'
 import { artileDislikeAPI, artileReportAPI } from '@/api/artile'
 export default {
   props: {
-    obj: Object // 文章对象
+    obj: Object, // 文章对象
+    isShow: {
+      type: Boolean,
+      default: true
+    }
   },
   data() {
     return {

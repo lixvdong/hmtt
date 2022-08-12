@@ -15,8 +15,12 @@
         </template>
         <template #default>
           <div>
-            <van-button type="info" size="mini" v-if="artileObj.is_followed">已关注</van-button>
-            <van-button icon="plus" type="info" size="mini" plain v-else>关注</van-button>
+            <van-button type="info" size="mini" v-if="artileObj.is_followed" @click="follow(false)"
+              >已关注</van-button
+            >
+            <van-button icon="plus" type="info" size="mini" plain v-else @click="follow(true)"
+              >关注</van-button
+            >
           </div>
         </template>
       </van-cell>
@@ -32,31 +36,69 @@
 
       <!-- 点赞 -->
       <div class="like-box">
-        <van-button icon="good-job" type="danger" size="small" v-if="artileObj.attitude === 1"
+        <van-button
+          icon="good-job"
+          type="danger"
+          size="small"
+          v-if="artileObj.attitude === 1"
+          @click="liking(false)"
           >已点赞</van-button
         >
-        <van-button icon="good-job-o" type="danger" plain size="small" v-else>点赞</van-button>
+        <van-button icon="good-job-o" type="danger" plain size="small" v-else @click="liking(true)"
+          >点赞</van-button
+        >
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { getArtileAPI } from '@/api/artile'
+import {
+  getArtileAPI,
+  followingAPI,
+  unFollowingAPI,
+  unArtileLikeAPI,
+  artileLikeAPI
+} from '@/api/artile'
 export default {
   name: 'ArticleDetail',
   data() {
     return {
-      artileObj: {}
+      artileObj: {} // 文章对象
     }
   },
   created() {
     this.getArtile()
   },
   methods: {
+    // 获取文章详情
     async getArtile() {
       const { data: res } = await getArtileAPI(this.$route.query.id)
       this.artileObj = res.data
+    },
+    // 关注/取消关注作者
+    async follow(bool) {
+      if (bool) {
+        // 关注
+        this.artileObj.is_followed = true
+        await followingAPI({ target: this.artileObj.aut_id })
+      } else {
+        // 取消关注
+        this.artileObj.is_followed = false
+        await unFollowingAPI(this.artileObj.aut_id)
+      }
+    },
+    // 点赞文章/取消点赞文章
+    async liking(bool) {
+      if (bool) {
+        // 点赞
+        this.artileObj.attitude = 1
+        await artileLikeAPI({ target: this.artileObj.art_id })
+      } else {
+        // 取消点赞
+        this.artileObj.attitude = 0
+        await unArtileLikeAPI(this.artileObj.art_id)
+      }
     }
   }
 }
