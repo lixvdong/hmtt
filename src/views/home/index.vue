@@ -12,7 +12,7 @@
     <!-- 标签栏 -->
     <van-tabs v-model="active" color="#007bff" sticky offset-top="1.226667rem">
       <van-tab v-for="item in channList" :title="item.name" :key="item.id">
-        <article-list />
+        <article-list :active="item.id" />
       </van-tab>
     </van-tabs>
   </div>
@@ -38,10 +38,10 @@ export default {
     this.getChannList()
   },
   methods: {
+    // 获取频道列表
     async getChannList() {
       const { data: res } = await getUserChannListAPI()
       this.channList = res.data.channels
-      console.log(res)
     }
   }
 }
