@@ -3,9 +3,10 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import 'amfe-flexible'
-import { NavBar } from 'vant'
+import { NavBar, Field, Form, Button, Notify } from 'vant'
+const vants = [NavBar, Field, Form, Button, Notify]
+vants.forEach(item => Vue.use(item))
 
-Vue.use(NavBar)
 Vue.config.productionTip = false
 
 new Vue({
