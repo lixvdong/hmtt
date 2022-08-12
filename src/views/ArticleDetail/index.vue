@@ -49,6 +49,9 @@
         >
       </div>
     </div>
+
+    <!-- 评论列表 -->
+    <comment-list />
   </div>
 </template>
 
@@ -60,12 +63,16 @@ import {
   unArtileLikeAPI,
   artileLikeAPI
 } from '@/api/artile'
+import CommentList from './CommentList.vue'
 export default {
   name: 'ArticleDetail',
   data() {
     return {
       artileObj: {} // 文章对象
     }
+  },
+  components: {
+    CommentList
   },
   created() {
     this.getArtile()
