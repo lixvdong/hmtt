@@ -11,18 +11,73 @@
         @click="$router.back()"
       />
       <!-- 搜索组件 -->
-      <van-search v-fofo placeholder="请输入搜索关键词" background="#007BFF" shape="round" />
+      <van-search
+        v-fofo
+        v-model="kw"
+        @input="inputFn"
+        placeholder="请输入搜索关键词"
+        background="#007BFF"
+        shape="round"
+      />
+    </div>
+    <!-- 搜索建议列表 -->
+    <div class="sugg-list" v-if="suggerList.length !== 0">
+      <div
+        class="sugg-item"
+        v-for="(item, index) in suggerList"
+        :key="index"
+        v-html="lightFn(item, kw)"
+      ></div>
+    </div>
+    <!-- 搜索历史 -->
+    <div class="search-history" v-else>
+      <!-- 标题 -->
+      <van-cell title="搜索历史">
+        <!-- 使用 right-icon 插槽来自定义右侧图标 -->
+        <template #right-icon>
+          <van-icon name="delete" class="search-icon" />
+        </template>
+      </van-cell>
+      <!-- 历史列表 -->
+      <div class="history-list">
+        <span class="history-item" v-for="(item, index) in history" :key="index">{{ item }}</span>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { suggertionAPI } from '@/api/search'
+import { lightFn } from '@/utils/str'
 export default {
   name: 'MySearch',
   data() {
     return {
-      kw: '' // 搜索关键字
+      kw: '', // 搜索关键字
+      timer: null, // 定时器
+      suggerList: [], // 搜索建议列表
+      history: ['API', 'java', 'css', '前端', '后台接口', 'python'] // 搜索历史
     }
+  },
+  watch: {
+    kw(val) {
+      if (val === '') {
+        this.suggerList = []
+      }
+    }
+  },
+  methods: {
+    // 搜索建议联想
+    inputFn() {
+      if (this.kw.trim().length === 0) return
+      clearTimeout(this.timer)
+      this.timer = setTimeout(async () => {
+        const { data: res } = await suggertionAPI({ q: this.kw })
+        this.suggerList = res.data.options
+      }, 500)
+    },
+    // 关键词高亮
+    lightFn: lightFn
   }
 }
 </script>
@@ -41,6 +96,38 @@ export default {
   /*搜索组件*/
   .van-search {
     flex: 1;
+  }
+}
+
+/*搜索建议列表样式 */
+.sugg-list {
+  .sugg-item {
+    padding: 0 15px;
+    border-bottom: 1px solid #f8f8f8;
+    font-size: 14px;
+    line-height: 50px;
+    // 实现省略号的三行代码
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+/**搜索历史 */
+.search-icon {
+  font-size: 16px;
+  line-height: inherit;
+}
+
+.history-list {
+  padding: 0 10px;
+  .history-item {
+    display: inline-block;
+    font-size: 12px;
+    padding: 8px 14px;
+    background-color: #efefef;
+    margin: 10px 8px 0px 8px;
+    border-radius: 10px;
   }
 }
 </style>
