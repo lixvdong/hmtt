@@ -14,6 +14,7 @@ import {
   Icon,
   Cell,
   PullRefresh,
+  ActionSheet,
   List,
   Tab,
   Tabs
@@ -29,6 +30,7 @@ const vants = [
   Icon,
   Cell,
   PullRefresh,
+  ActionSheet,
   List,
   Tab,
   Tabs

@@ -1,43 +1,83 @@
 <template>
-  <!-- 一条文章单元格 -->
-  <van-cell>
-    <!-- 标题区域的插槽 -->
-    <template #title>
-      <div class="title-box">
-        <!-- 标题 -->
-        <span>{{ obj.title }}</span>
-        <!-- 单图 -->
-        <img class="thumb" :src="obj.cover.images[0]" v-if="obj.cover.type === 1" />
-      </div>
-      <!-- 三张图片 -->
-      <div class="thumb-box" v-if="obj.cover.type === 3">
-        <img class="thumb" :src="item" v-for="(item, index) in obj.cover.images" :key="index" />
-      </div>
-    </template>
-    <!-- label 区域的插槽 -->
-    <template #label>
-      <div class="label-box">
-        <div>
-          <span>{{ obj.aut_name }}</span>
-          <span>{{ obj.comm_count }}评论</span>
-          <span>{{ dateFrom(obj.pubdate) }}</span>
+  <div>
+    <!-- 一条文章单元格 -->
+    <van-cell>
+      <!-- 标题区域的插槽 -->
+      <template #title>
+        <div class="title-box">
+          <!-- 标题 -->
+          <span>{{ obj.title }}</span>
+          <!-- 单图 -->
+          <img class="thumb" :src="obj.cover.images[0]" v-if="obj.cover.type === 1" />
         </div>
-        <!-- 反馈按钮 -->
-        <van-icon name="cross" />
-      </div>
-    </template>
-  </van-cell>
+        <!-- 三张图片 -->
+        <div class="thumb-box" v-if="obj.cover.type === 3">
+          <img class="thumb" :src="item" v-for="(item, index) in obj.cover.images" :key="index" />
+        </div>
+      </template>
+      <!-- label 区域的插槽 -->
+      <template #label>
+        <div class="label-box">
+          <div>
+            <span>{{ obj.aut_name }}</span>
+            <span>{{ obj.comm_count }}评论</span>
+            <span>{{ dateFrom(obj.pubdate) }}</span>
+          </div>
+          <!-- 反馈按钮 -->
+          <van-icon name="cross" @click.stop="show = true" />
+        </div>
+      </template>
+    </van-cell>
+    <!--反馈面板 -->
+    <van-action-sheet
+      v-model="show"
+      :actions="actions"
+      get-container="body"
+      :cancel-text="cancelText"
+      @cancel="onCancel"
+      @select="selectFn"
+    />
+  </div>
 </template>
 
 <script>
 import dateFrom from '@/utils/dateFormat'
+import { firstActions, secondActions } from '@/utils/sheetData'
 export default {
   props: {
     obj: Object // 文章对象
   },
+  data() {
+    return {
+      show: false,
+      actions: firstActions,
+      cancelText: '取消'
+    }
+  },
   methods: {
     // 格式化时间
-    dateFrom: dateFrom
+    dateFrom: dateFrom,
+    // 关闭反馈面板
+    onCancel() {
+      if (this.cancelText === '返回') {
+        this.cancelText = '取消'
+        this.actions = firstActions
+        this.show = true
+      }
+    },
+    // 选择反馈选项
+    selectFn(action) {
+      console.log(action)
+      if (action.name === '不感兴趣') {
+        this.show = false
+      } else if (action.name === '反馈垃圾内容') {
+        this.actions = secondActions
+        this.cancelText = '返回'
+      } else {
+        this.show = false
+        this.actions = firstActions
+      }
+    }
   }
 }
 </script>
