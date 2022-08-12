@@ -44,7 +44,7 @@ export default {
         this.$store.commit('getToken', res.data.token)
         this.$store.commit('getRefresh_token', res.data.refresh_token)
         this.$notify({ type: 'success', message: '登陆成功' })
-        this.$router.push('/home')
+        this.$router.push('/layout')
       } catch (err) {
         console.log(err)
         this.$notify({ type: 'warning', message: '登陆失败，请联系程序员～～～' })
