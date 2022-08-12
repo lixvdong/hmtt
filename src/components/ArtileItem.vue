@@ -43,7 +43,7 @@
 <script>
 import dateFrom from '@/utils/dateFormat'
 import { firstActions, secondActions } from '@/utils/sheetData'
-import { artileDislikeAPI } from '@/api/artile'
+import { artileDislikeAPI, artileReportAPI } from '@/api/artile'
 export default {
   props: {
     obj: Object // 文章对象
@@ -81,7 +81,23 @@ export default {
         this.actions = secondActions
         this.cancelText = '返回'
       } else {
+        // 举报其他问题
         this.show = false
+        console.log(action)
+        const object = {
+          target: this.obj.art_id,
+          type: action.value
+        }
+        if (action.value === 0) {
+          object.remark = '这就是其他问题～～～'
+        }
+        try {
+          await artileReportAPI(object)
+          this.$notify({ type: 'success', message: '反馈成功' })
+        } catch (err) {
+          console.log(err)
+          this.$notify({ type: 'warning', message: '反馈失败，请联系程序员～～～' })
+        }
         setTimeout(() => {
           this.actions = firstActions
         }, 500)

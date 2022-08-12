@@ -30,6 +30,8 @@ request.interceptors.response.use(
   },
   function (error) {
     if (error.response.status === 401) {
+      store.commit('getToken', '')
+      store.commit('getRefresh_token', '')
       router.push('/')
     }
     // 超出 2xx 范围的状态码都会触发该函数。
