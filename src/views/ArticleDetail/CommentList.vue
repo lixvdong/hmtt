@@ -2,34 +2,43 @@
   <div>
     <!-- 评论列表 -->
     <div class="cmt-list" :class="show ? 'art-cmt-container-1' : 'art-cmt-container-2'">
-      <!-- 评论的 Item 项 -->
-      <div class="cmt-item" v-for="item in commentList" :key="item.com_id">
-        <!-- 头部区域 -->
-        <div class="cmt-header">
-          <!-- 头部左侧 -->
-          <div class="cmt-header-left">
-            <img :src="item.aut_photo" alt="" class="avatar" />
-            <span class="uname">{{ item.aut_name }}</span>
+      <van-list
+        v-model="loading"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="onLoad"
+        offset="50"
+        :immediate-check="false"
+      >
+        <!-- 评论的 Item 项 -->
+        <div class="cmt-item" v-for="item in commentList" :key="item.com_id">
+          <!-- 头部区域 -->
+          <div class="cmt-header">
+            <!-- 头部左侧 -->
+            <div class="cmt-header-left">
+              <img :src="item.aut_photo" alt="" class="avatar" />
+              <span class="uname">{{ item.aut_name }}</span>
+            </div>
+            <!-- 头部右侧 -->
+            <div class="cmt-header-right">
+              <van-icon
+                name="like"
+                size="16"
+                color="red"
+                v-if="item.is_liking"
+                @click="isLiking(false, item)"
+              />
+              <van-icon name="like-o" size="16" color="gray" v-else @click="isLiking(true, item)" />
+            </div>
           </div>
-          <!-- 头部右侧 -->
-          <div class="cmt-header-right">
-            <van-icon
-              name="like"
-              size="16"
-              color="red"
-              v-if="item.is_liking"
-              @click="isLiking(false, item)"
-            />
-            <van-icon name="like-o" size="16" color="gray" v-else @click="isLiking(true, item)" />
+          <!-- 主体区域 -->
+          <div class="cmt-body">
+            {{ item.content }}
           </div>
+          <!-- 尾部区域 -->
+          <div class="cmt-footer">{{ dateForm(item.pubdate) }}</div>
         </div>
-        <!-- 主体区域 -->
-        <div class="cmt-body">
-          {{ item.content }}
-        </div>
-        <!-- 尾部区域 -->
-        <div class="cmt-footer">{{ dateForm(item.pubdate) }}</div>
-      </div>
+      </van-list>
     </div>
     <!-- 底部添加评论区域 - 1 -->
     <div class="add-cmt-box van-hairline--top" v-if="show">
@@ -71,7 +80,9 @@ export default {
       },
       show: true, // 评论切换
       totalCount: '', // 总评论数
-      content: '' // 评论内容
+      content: '', // 评论内容
+      loading: false,
+      finished: false
     }
   },
   created() {
@@ -81,8 +92,13 @@ export default {
     // 获取评论列表
     async getCommentList() {
       const { data: res } = await getCommentListAPI(this.query)
-      this.commentList = res.data.results
+      this.commentList = [...this.commentList, ...res.data.results]
       this.totalCount = res.data.total_count || ''
+      this.query.offset = res.data.last_id
+      this.loading = false
+      if (res.data.results.length === 0) {
+        this.finished = true
+      }
     },
     // 多久之前
     dateForm,
@@ -122,6 +138,10 @@ export default {
       this.totalCount++
       // 成功后, 清除输入框内容
       this.content = ''
+    },
+    // 加载更多
+    onLoad() {
+      this.getCommentList()
     }
   }
 }
