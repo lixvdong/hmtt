@@ -12,11 +12,11 @@ export const getUserAPI = () => {
 }
 
 // 跟新用户头像
-export const changePhoto = data => {
+export const changePhotoAPI = data => {
   return request.patch('/v1_0/user/photo', data)
 }
 
 // 跟新用户信息
-export const changeUser = data => {
+export const changeUserAPI = data => {
   return request.patch('/v1_0/user/profile', data)
 }
