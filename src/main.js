@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import 'amfe-flexible'
+import direct from './dieectives/fofo'
 import {
   NavBar,
   Field,
@@ -19,6 +20,7 @@ import {
   Row,
   Col,
   Badge,
+  Search,
   List,
   Tab,
   Tabs
@@ -39,9 +41,11 @@ const vants = [
   Row,
   Col,
   Badge,
+  Search,
   List,
   Tab,
-  Tabs
+  Tabs,
+  direct
 ]
 vants.forEach(item => Vue.use(item))
 

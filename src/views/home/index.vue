@@ -6,7 +6,7 @@
         <img :src="imgUrl" alt="" class="logo" />
       </template>
       <template #right>
-        <van-icon name="search" size="18" />
+        <van-icon name="search" size="18" @click="$router.push('/search')" />
       </template>
     </van-nav-bar>
     <!-- 标签栏 -->
