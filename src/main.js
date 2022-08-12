@@ -25,7 +25,8 @@ import {
   Tab,
   Tabs,
   Tag,
-  CellGroup
+  CellGroup,
+  Dialog
 } from 'vant'
 const vants = [
   NavBar,
@@ -49,7 +50,8 @@ const vants = [
   Tabs,
   direct,
   Tag,
-  CellGroup
+  CellGroup,
+  Dialog
 ]
 vants.forEach(item => Vue.use(item))
 

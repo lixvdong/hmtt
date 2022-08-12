@@ -36,7 +36,7 @@
     <van-cell-group class="action-card">
       <van-cell icon="edit" title="编辑资料" is-link />
       <van-cell icon="chat-o" title="小思同学" is-link />
-      <van-cell icon="warning-o" title="退出登录" is-link />
+      <van-cell icon="warning-o" title="退出登录" is-link @click="goBack" />
     </van-cell-group>
   </div>
 </template>
@@ -54,9 +54,26 @@ export default {
     this.getUserInfo()
   },
   methods: {
+    // 获取用户基本信息
     async getUserInfo() {
       const { data: res } = await getUserInfoAPI()
       this.user = res.data
+    },
+    // 退出
+    goBack() {
+      this.$dialog
+        .confirm({
+          message: '确定要退出吗？？？这就不爱了吗？？？'
+        })
+        .then(() => {
+          // on confirm
+          this.$router.push('/')
+          this.$store.commit('getToken', '')
+          this.$store.commit('getRefresh_token', '')
+        })
+        .catch(() => {
+          // on cancel
+        })
     }
   }
 }
