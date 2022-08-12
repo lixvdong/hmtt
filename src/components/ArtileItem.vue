@@ -43,6 +43,7 @@
 <script>
 import dateFrom from '@/utils/dateFormat'
 import { firstActions, secondActions } from '@/utils/sheetData'
+import { artileDislikeAPI } from '@/api/artile'
 export default {
   props: {
     obj: Object // 文章对象
@@ -66,16 +67,24 @@ export default {
       }
     },
     // 选择反馈选项
-    selectFn(action) {
-      console.log(action)
+    async selectFn(action) {
       if (action.name === '不感兴趣') {
         this.show = false
+        try {
+          await artileDislikeAPI({ target: this.obj.art_id })
+          this.$notify({ type: 'success', message: '反馈成功' })
+        } catch (err) {
+          console.log(err)
+          this.$notify({ type: 'warning', message: '反馈失败，请联系程序员～～～' })
+        }
       } else if (action.name === '反馈垃圾内容') {
         this.actions = secondActions
         this.cancelText = '返回'
       } else {
         this.show = false
-        this.actions = firstActions
+        setTimeout(() => {
+          this.actions = firstActions
+        }, 500)
       }
     }
   }
