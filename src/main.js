@@ -13,10 +13,26 @@ import {
   TabbarItem,
   Icon,
   Cell,
+  PullRefresh,
+  List,
   Tab,
   Tabs
 } from 'vant'
-const vants = [NavBar, Field, Form, Button, Notify, Tabbar, TabbarItem, Icon, Cell, Tab, Tabs]
+const vants = [
+  NavBar,
+  Field,
+  Form,
+  Button,
+  Notify,
+  Tabbar,
+  TabbarItem,
+  Icon,
+  Cell,
+  PullRefresh,
+  List,
+  Tab,
+  Tabs
+]
 vants.forEach(item => Vue.use(item))
 
 Vue.config.productionTip = false
