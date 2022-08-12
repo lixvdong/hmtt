@@ -9,6 +9,7 @@ const routes = [
   { path: '/search', component: () => import('@/views/search') },
   { path: '/searchresult/:kw', component: () => import('@/views/search/SearchResult.vue') },
   { path: '/useredit', component: () => import('@/views/user/UserEdit.vue') },
+  { path: '/articledetail', component: () => import('@/views/ArticleDetail') },
   {
     path: '/layout',
     component: () => import('@/views/layout'),

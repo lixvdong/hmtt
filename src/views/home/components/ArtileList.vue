@@ -12,7 +12,12 @@
         :immediate-check="false"
       >
         <!-- 文章列表 -->
-        <article-item v-for="item in artileList" :key="item.art_id" :obj="item" />
+        <article-item
+          v-for="item in artileList"
+          :key="item.art_id"
+          :obj="item"
+          @click.native="$router.push(`/articledetail?id=${item.art_id}`)"
+        />
       </van-list>
     </van-pull-refresh>
   </div>
