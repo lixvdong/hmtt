@@ -26,6 +26,7 @@ import {
   Tabs,
   Tag,
   CellGroup,
+  Image,
   Dialog
 } from 'vant'
 const vants = [
@@ -51,6 +52,7 @@ const vants = [
   direct,
   Tag,
   CellGroup,
+  Image,
   Dialog
 ]
 vants.forEach(item => Vue.use(item))

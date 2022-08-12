@@ -8,6 +8,7 @@ const routes = [
   { path: '/', redirect: '/login' },
   { path: '/search', component: () => import('@/views/search') },
   { path: '/searchresult/:kw', component: () => import('@/views/search/SearchResult.vue') },
+  { path: '/useredit', component: () => import('@/views/user/UserEdit.vue') },
   {
     path: '/layout',
     component: () => import('@/views/layout'),
