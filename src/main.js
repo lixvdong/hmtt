@@ -23,7 +23,9 @@ import {
   Search,
   List,
   Tab,
-  Tabs
+  Tabs,
+  Tag,
+  CellGroup
 } from 'vant'
 const vants = [
   NavBar,
@@ -45,7 +47,9 @@ const vants = [
   List,
   Tab,
   Tabs,
-  direct
+  direct,
+  Tag,
+  CellGroup
 ]
 vants.forEach(item => Vue.use(item))
 
