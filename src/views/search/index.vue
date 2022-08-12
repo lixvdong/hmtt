@@ -18,6 +18,7 @@
         placeholder="请输入搜索关键词"
         background="#007BFF"
         shape="round"
+        @search="goSearchResult(kw)"
       />
     </div>
     <!-- 搜索建议列表 -->
@@ -27,6 +28,7 @@
         v-for="(item, index) in suggerList"
         :key="index"
         v-html="lightFn(item, kw)"
+        @click="goSearchResult(item)"
       ></div>
     </div>
     <!-- 搜索历史 -->
@@ -35,12 +37,18 @@
       <van-cell title="搜索历史">
         <!-- 使用 right-icon 插槽来自定义右侧图标 -->
         <template #right-icon>
-          <van-icon name="delete" class="search-icon" />
+          <van-icon name="delete" class="search-icon" @click="history = []" />
         </template>
       </van-cell>
       <!-- 历史列表 -->
       <div class="history-list">
-        <span class="history-item" v-for="(item, index) in history" :key="index">{{ item }}</span>
+        <span
+          class="history-item"
+          v-for="(item, index) in history"
+          :key="index"
+          @click="goSearchResult(item)"
+          >{{ item }}</span
+        >
       </div>
     </div>
   </div>
@@ -56,7 +64,7 @@ export default {
       kw: '', // 搜索关键字
       timer: null, // 定时器
       suggerList: [], // 搜索建议列表
-      history: ['API', 'java', 'css', '前端', '后台接口', 'python'] // 搜索历史
+      history: JSON.parse(localStorage.getItem('his')) || [] // 搜索历史
     }
   },
   watch: {
@@ -64,6 +72,9 @@ export default {
       if (val === '') {
         this.suggerList = []
       }
+    },
+    history() {
+      localStorage.setItem('his', JSON.stringify(this.history))
     }
   },
   methods: {
@@ -77,7 +88,13 @@ export default {
       }, 500)
     },
     // 关键词高亮
-    lightFn: lightFn
+    lightFn: lightFn,
+    // 跳转搜索结果页面
+    goSearchResult(item) {
+      this.$router.push(`/searchresult/${item}`)
+      this.history.push(item)
+      this.history = [...new Set(this.history)]
+    }
   }
 }
 </script>
