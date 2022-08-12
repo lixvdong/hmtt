@@ -11,19 +11,37 @@
     </van-nav-bar>
     <!-- 标签栏 -->
     <van-tabs v-model="active" color="#007bff" sticky offset-top="1.226667rem">
-      <van-tab v-for="index in 8" :title="'标签 ' + index" :key="index"> 内容 {{ index }} </van-tab>
+      <van-tab v-for="item in channList" :title="item.name" :key="item.id">
+        <article-list />
+      </van-tab>
     </van-tabs>
   </div>
 </template>
 
 <script>
+import { getUserChannListAPI } from '@/api/channels'
 import img from '@/assets/logo.png'
+import ArticleList from './components/ArtileList.vue'
 export default {
   name: 'MyHomes',
   data() {
     return {
       imgUrl: img, // logo地址
-      active: 0 // 导航栏索引
+      active: 0, // 导航栏索引
+      channList: [] // 频道列表
+    }
+  },
+  components: {
+    ArticleList
+  },
+  created() {
+    this.getChannList()
+  },
+  methods: {
+    async getChannList() {
+      const { data: res } = await getUserChannListAPI()
+      this.channList = res.data.channels
+      console.log(res)
     }
   }
 }
